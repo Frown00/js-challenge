@@ -26,9 +26,9 @@ function fetchData(url) {
   });
 }
 
-function run(inputData) {
+function run() {
   const url = 'https://www.monogo.pl/competition/input.txt'
-  const response = fetchData(url);
+  fetchData(url);
 }
 
 function extendProducts(products, colors, sizes) {
@@ -49,16 +49,19 @@ function solve(inputData) {
    */
   const { selectedFilters, products, colors, sizes } = inputData;
   const extendedProducts = extendProducts(products, colors, sizes);
-  const cheap = extendedProducts.filter(p => p.price <= 200);
-  const max = Math.max(...cheap.map(c => c.price))
-  const min = Math.min(...cheap.map(c => c.price))
+  const filtered = extendedProducts.filter(p => 
+    selectedFilters.colors.includes(p.color) && 
+    selectedFilters.sizes.includes(p.size) && 
+    p.price <= 200
+  );
+  const max = Math.max(...filtered.map(c => c.price))
+  const min = Math.min(...filtered.map(c => c.price))
   const multiple = Math.floor(max * min)
   const result = multiple.toString().split('')
   const sum = []
   for(let i = 0; i < result.length; i+=2) {
     sum.push(parseInt(result[i]) + parseInt(result[i+1]));
   }
-  console.log(sum, multiple)
   const final = sum[1] * multiple * 'Monogo'.length
   console.log(final);
 }
